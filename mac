@@ -1,0 +1,9 @@
+#!/bin/bash
+#systemctl stop NetworkManager.service
+rc-service NetworkManager stop
+#sleep 1
+macchanger -rb wlan0
+macchanger -rb eth0
+sleep 1
+#systemctl start NetworkManager.service
+rc-service NetworkManager start

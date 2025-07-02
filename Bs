@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+java --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.desktop/javax.swing=ALL-UNNAMED -jar /opt/BurpSuiteCommunity/burpsuite_community.jar

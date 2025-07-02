@@ -1,0 +1,3 @@
+#!/bin/bash
+for i in *.ts; do ffmpeg -i "$i" -c copy "${i%.ts}.mp4"; done && rm *.ts
+

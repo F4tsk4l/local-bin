@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+while getopts "Aah" opt; do
+  case $opt in
+  A)
+    echo "Full upgrade selected (Pacman, Yay, Ya(Yazi), Cargo, Pipx)"
+    sudo pacman -Syud --noconfirm &&
+      yay -a -Su --noconfirm &&
+      ya pkg upgrade &&
+      cargo install-update -a &&
+      pipx upgrade-all
+    ;;
+  a)
+    echo "Partial upgrade selected (Ya(Yazi), Cargo, Pipx)"
+    ya pkg upgrade &&
+      cargo install-update -a &&
+      pipx upgrade-all
+    ;;
+  h)
+    echo "Usage:"
+    echo "  upgrade-all -A    Perform full upgrade (Pacman, Yay, Fisher, Cargo, Pipx)"
+    echo "  upgrade-all -a    Perform upgrade (Fisher, Cargo, Pipx)"
+    echo "  upgrade-all -h    Display this help message"
+    exit 0
+    ;;
+  *)
+    echo "Invalid option. Use -h for help."
+    exit 1
+    ;;
+  esac
+done
+
+shift $((OPTIND - 1))

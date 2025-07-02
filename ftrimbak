@@ -1,0 +1,12 @@
+#!/bin/bash
+while getopts ":q:" opt; do
+ case "$opt" in
+    q)
+     ffmpeg -ss "$2" -t 30 -i "$3" -c:a aac -c:v libx264 -crf 28 "${3%(*).*}-trimmedc.mp4" ;;
+
+    *)
+    echo "This works just fine" ;;
+    #ffmpeg -ss "$2" -t 30 -i "$3" -c:a aac -c:v libx264 "${3%(*).*}-trimmed.mp4" ;;
+ esac
+done
+#shift "$(($OPTIND -1))"#

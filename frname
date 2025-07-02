@@ -1,0 +1,13 @@
+#!/bin/bash
+for i in *.mp3; do
+#t=$(ffprobe -v error -of csv=p=0 -show_entries format_tags=title,artist "$i")
+tags=$(ffprobe -v quiet -of csv=p=0 -show_entries format_tags=title,artist "$i")
+if [ -z "$tags" ]; then
+continue;
+echo "It doesn't work";
+else
+artist=$(echo $tags | cut -d, -f2)
+title=$(echo $tags | cut -d, -f1)
+mv --update --verbose -- "$i" "$artist - $title".mp3;
+fi
+done

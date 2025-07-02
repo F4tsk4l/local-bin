@@ -1,0 +1,4 @@
+#!/bin/bash
+nmcli c | sed -n '2p' | awk -F' '  '{print $1}'
+#connmanctl services | head -1 | awk -F' '  '{print $2}'
+
