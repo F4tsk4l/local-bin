@@ -1,0 +1,21 @@
+rofi_cmd() {
+  rofi -dmenu \
+    -theme /home/g4m3r/.config/rofi/themes/rosepine-moon.rasi \
+    -u "$urgent" \
+    -p "🌙  Power Menu"
+}
+# Power options with icons
+options="  Lock\n󰤄  Suspend\n󰍃  Logout\n󰜉  Reboot\n󰐥  Shutdown"
+choice=$(echo -e "$options" | rofi_cmd)
+
+# Execute selected action
+case "$choice" in
+*Lock*) i3lock --radius 100 -eki ~/Saver/shaded_landscape.png -F --ring-width 3 --time-str="%H:%M" -p default ;;
+**Suspend*)
+  i3lock --radius 100 -eki ~/Saver/shaded_landscape.png -F --ring-width 3 --time-str="%H:%M" -p default
+  loginctl suspend
+  ;;
+*Logout*) loginctl terminate-user $USER ;;
+*Reboot*) loginctl reboot ;;
+*Shutdown*) loginctl poweroff ;;
+esac
