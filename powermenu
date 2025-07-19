@@ -1,21 +1,56 @@
-rofi_cmd() {
+#!/bin/bash
+
+# Define power menu options with icons
+options=(
+  " Lock"
+  "󰤄 Suspend"
+  "󰍃 Logout"
+  "󰜉 Reboot"
+  "󰐥 Shutdown"
+)
+
+# Launch main rofi menu
+choice=$(printf '%s\n' "${options[@]}" | rofi -dmenu \
+  -theme "$HOME/.config/rofi/themes/rosepine-moon.rasi" \
+  -p "🌙  Power Menu")
+
+# Exit if no selection
+[ -z "$choice" ] && exit
+
+# Confirmation prompt with icon
+confirm() {
+  prompt="$1"
   rofi -dmenu \
-    -theme /home/g4m3r/.config/rofi/themes/rosepine-moon.rasi \
-    -u "$urgent" \
-    -p "🌙  Power Menu"
+    -theme "$HOME/.config/rofi/themes/rosepine-moon.rasi" \
+    -p "$prompt (yes/no)" <<<"no\nyes"
 }
-# Power options with icons
-options="  Lock\n󰤄  Suspend\n󰍃  Logout\n󰜉  Reboot\n󰐥  Shutdown"
-choice=$(echo -e "$options" | rofi_cmd)
 
 # Execute selected action
 case "$choice" in
-*Lock*) i3lock --radius 100 -eki ~/Saver/shaded_landscape.png -F --ring-width 3 --time-str="%H:%M" -p default ;;
-**Suspend*)
-  i3lock --radius 100 -eki ~/Saver/shaded_landscape.png -F --ring-width 3 --time-str="%H:%M" -p default
-  loginctl suspend
+*Lock*)
+  i3lock --radius 100 \
+    -eki ~/Saver/shaded_landscape.png \
+    --blur 5 \
+    -F --ring-width 3 --time-str="%H:%M" -p default
   ;;
-*Logout*) loginctl terminate-user $USER ;;
-*Reboot*) loginctl reboot ;;
-*Shutdown*) loginctl poweroff ;;
+*Suspend*)
+  i3lock --radius 100 -eki ~/Saver/shaded_landscape.png -F \
+    --ring-width 3 --time-str="%H:%M" -p default
+
+  # Cleanly suspend after lock and rofi closes
+  (
+    sleep 1
+    pkill -u "$USER" -f 'rofi -dmenu'
+    loginctl suspend
+  ) &
+  ;;
+*Logout*)
+  kill -15 -1
+  ;;
+*Reboot*)
+  [ "$(confirm "󰜉 Reboot")" = "yes" ] && loginctl reboot
+  ;;
+*Shutdown*)
+  [ "$(confirm "󰐥 Shutdown")" = "yes" ] && loginctl poweroff
+  ;;
 esac
