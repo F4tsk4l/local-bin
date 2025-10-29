@@ -36,7 +36,6 @@ case "$choice" in
 *Suspend*)
   i3lock --radius 100 -eki ~/Saver/shaded_landscape.png -F \
     --ring-width 3 --time-str="%H:%M" -p default
-
   # Cleanly suspend after lock and rofi closes
   (
     sleep 1
@@ -48,9 +47,17 @@ case "$choice" in
   kill -15 -1
   ;;
 *Reboot*)
-  [ "$(confirm "󰜉 Reboot")" = "yes" ] && loginctl reboot
+  confirm=$(printf "n\ny" | rofi -dmenu \
+    -theme ~/.config/rofi/themes/rosepine-moon.rasi \
+    -p "Reboot? [y/n]" \
+    -selected-row 0)
+  [ "$confirm" = "y" ] && loginctl reboot
   ;;
 *Shutdown*)
-  [ "$(confirm "󰐥 Shutdown")" = "yes" ] && loginctl poweroff
+  confirm=$(printf "n\ny" | rofi -dmenu \
+    -theme ~/.config/rofi/themes/rosepine-moon.rasi \
+    -p "Shutdown? [y/n]" \
+    -selected-row 0)
+  [ "$confirm" = "y" ] && loginctl poweroff
   ;;
 esac
