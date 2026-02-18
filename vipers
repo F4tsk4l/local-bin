@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-c="$(exec ps -aux | grep viper-gui)"
-if [ -z "$c" ] 
-then
-    viper restart && viper-gui
-else
-    viper restart && killall viper-gui && viper-gui
-fi
